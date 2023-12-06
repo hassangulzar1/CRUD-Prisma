@@ -18,3 +18,19 @@ export async function POST(req) {
     return NextResponse.json({ message: error });
   }
 }
+
+export async function DELETE(id) {
+  try {
+    const deleteId = await id.json();
+    console.log(deleteId);
+    await prisma.user.delete({
+      where: {
+        id: deleteId.id,
+      },
+    });
+
+    return NextResponse.json({ message: "Successfully Deleted" });
+  } catch (error) {
+    return NextResponse.json({ message: "Something Error found" });
+  }
+}

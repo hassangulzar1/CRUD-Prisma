@@ -1,5 +1,6 @@
 import { prisma } from "@/config/prisma";
 import Form from "@/component/Form";
+import { Delete, Update } from "@/component/DeleteUpdate";
 const fetchUsers = async () => {
   try {
     const users = await prisma.User.findMany();
@@ -38,8 +39,8 @@ export default async function Home() {
                     <td>{item.age}</td>
                     <td>{item.sallary}</td>
                     <td>
-                      <button className=" mx-2 underline">Edit</button>
-                      <button className="underline">Delete</button>
+                      <Update className=" mx-2 underline">Edit</Update>
+                      <Delete id={item.id} />
                     </td>
                   </tr>
                 ))}
