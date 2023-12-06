@@ -5,7 +5,7 @@ const initialStata = {
   name: "",
   email: "",
   age: "",
-  sallary: 0,
+  sallary: "",
 };
 
 export default function Form() {
@@ -15,17 +15,14 @@ export default function Form() {
   const inputChangeHandler = (e) => {
     setdata({ ...data, [e.target.name]: e.target.value });
   };
-
-  const submitHandler = () => {
+  const submitHandler = async (e) => {
+    e.preventDefault();
     try {
+      setloading(true);
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
-      var raw = JSON.stringify({
-        name: "hassan",
-        email: "hs89133@gmail.com",
-        age: "233",
-        sallary: 2343,
-      });
+      var raw = JSON.stringify(data);
+
       var requestOptions = {
         method: "POST",
         headers: myHeaders,
@@ -33,22 +30,37 @@ export default function Form() {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/user", requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-    } catch (error) {}
+      const res = await fetch("http://localhost:3000/api/user", requestOptions);
+      if (!res.ok) {
+        throw new Error("error");
+      }
+      setdata(initialStata);
+
+      const successMess = await res.json();
+      return alert(successMess.message);
+    } catch (error) {
+      alert("error:", error.message);
+    } finally {
+      setloading(false);
+    }
   };
 
   return (
-    <form autocomplete="off" onSubmit={submitHandler}>
+    <form autoComplete="off" onSubmit={submitHandler}>
       <div>
         <label htmlFor="name">Name</label>
-        <input type="text" name="name" onChange={inputChangeHandler} required />
+        <input
+          value={data.name}
+          type="text"
+          name="name"
+          onChange={inputChangeHandler}
+          required
+        />
       </div>
       <div>
-        <label for="email">email</label>
+        <label htmlFor="email">email</label>
         <input
+          value={data.email}
           type="text"
           name="email"
           onChange={inputChangeHandler}
@@ -56,12 +68,19 @@ export default function Form() {
         />
       </div>
       <div>
-        <label for="salary">Age</label>
-        <input type="text" name="age" onChange={inputChangeHandler} required />
+        <label htmlFor="age">Age</label>
+        <input
+          value={data.age}
+          type="text"
+          name="age"
+          onChange={inputChangeHandler}
+          required
+        />
       </div>
       <div>
-        <label for="city">Sallary</label>
+        <label htmlFor="sallary">Sallary</label>
         <input
+          value={data.sallary}
           type="number"
           name="sallary"
           onChange={inputChangeHandler}
@@ -69,7 +88,9 @@ export default function Form() {
         />
       </div>
       <div className="form_action--button">
-        <input type="submit" />
+        <button disabled={loading}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
       </div>
     </form>
   );

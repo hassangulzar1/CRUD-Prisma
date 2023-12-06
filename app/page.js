@@ -11,7 +11,6 @@ const fetchUsers = async () => {
 
 export default async function Home() {
   const usersData = await fetchUsers();
-  console.log(usersData);
   return (
     <div style={{ backgroundColor: "green" }}>
       <table>

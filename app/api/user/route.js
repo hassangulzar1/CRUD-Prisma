@@ -8,10 +8,11 @@ export async function POST(req) {
       data: {
         name: body?.name,
         email: body?.email,
-        age: body.age,
-        sallary: body.sallary,
+        age: body?.age,
+        sallary: body?.sallary,
       },
     });
+
     return NextResponse.json({ message: "Successfully Created" });
   } catch (error) {
     return NextResponse.json({ message: error });

@@ -15,5 +15,5 @@ model User {
   email   String   @unique
   name    String?
   age     String?
-  sallary Int
+  sallary String 
 }
